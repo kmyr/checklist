@@ -32,8 +32,8 @@
           <span style="font-size:13px;" class="dueDateText">
             {{ task.dueDate.year }}/{{ task.dueDate.month }}/{{
               task.dueDate.day
-            }}</span
-          >
+            }}
+          </span>
         </label>
       </div>
     </form>
@@ -42,6 +42,7 @@
     <b-modal id="actionModal" title="Add New Item" ok-only>
       <div class="form-group">
         <label for="titleInput">Title</label>
+
         <input
           type="text"
           class="form-control"
@@ -51,6 +52,7 @@
       </div>
       <div class="form-group">
         <label for="notesInput">Notes</label>
+
         <input
           type="text"
           class="form-control"
@@ -65,7 +67,7 @@
             <input
               type="number"
               class="form-control"
-              id="dueDateInput"
+              id="dueYearInput"
               v-model="prepareItem.dueDate.year"
               placeholder="Year"
             />
@@ -74,7 +76,7 @@
             <input
               type="number"
               class="form-control"
-              id="dataInput"
+              id="dueMonthInput"
               v-model="prepareItem.dueDate.month"
               placeholder="Month"
             />
@@ -83,7 +85,7 @@
             <input
               type="number"
               class="form-control"
-              id="dataInput"
+              id="dueDayInput"
               v-model="prepareItem.dueDate.day"
               placeholder="Day"
             />
@@ -130,7 +132,7 @@
       </div>
       <div class="col-md-12">
         <button
-          @click="deleteData($route.params.task, prepareItem)"
+          @click="deleteItem()"
           type="button"
           class="btn btn-outline-danger"
         >
@@ -182,6 +184,7 @@
   </div>
 </template>
 <script>
+import $ from "jquery";
 import getData from "../actions/getData";
 import postData from "../actions/postData";
 import updateData from "../actions/updateData";
@@ -193,7 +196,9 @@ import { shamsiDay } from "../main";
 export default {
   data() {
     return {
-      prepareItem: { dueDate: { year: "1399", month: "", day: "" } },
+      prepareItem: {
+        dueDate: { year: "1399", month: "", day: "" },
+      },
       checklist: [],
       currentDate: null,
       updatingItem: false,
@@ -208,8 +213,28 @@ export default {
   },
   methods: {
     addItem() {
-      this.prepareItem.createdDate = this.currentDate;
-      this.postData(this.$route.params.task, this.prepareItem, true);
+      if (
+        $("#titleInput").val() !== "" &&
+        $("#notesInput").val() !== "" &&
+        $("#dueYearInput").val() !== "" &&
+        $("#dueMonthInput").val() !== "" &&
+        $("#dueDayInput").val() !== ""
+      ) {
+        this.prepareItem.createdDate = this.currentDate;
+        this.prepareItem.status = false;
+        this.postData(this.$route.params.task, this.prepareItem, true);
+      } else {
+        $("input")
+          .filter(function() {
+            return this.value == "";
+          })
+          .addClass("is-invalid");
+        $("input")
+          .filter(function() {
+            return this.value !== "";
+          })
+          .removeClass("is-invalid");
+      }
     },
     showItemDetails(object) {
       this.prepareItem = object;
@@ -238,6 +263,10 @@ export default {
         }
       }
     },
+    deleteItem() {
+      this.deleteData(this.$route.params.task, this.prepareItem);
+      this.postData("deletedLog", this.prepareItem, true);
+    },
     startEditAction() {
       this.showModal("showDetailsModal");
       this.updatingItem = true;
@@ -245,7 +274,23 @@ export default {
       this.showModal("actionModal");
     },
   },
-  watch: {},
+  watch: {
+    "prepareItem.dueDate.year": function() {
+      if (this.prepareItem.dueDate.year > 1404) {
+        this.prepareItem.dueDate.year = 1404;
+      }
+    },
+    "prepareItem.dueDate.month": function() {
+      if (this.prepareItem.dueDate.month > 12) {
+        this.prepareItem.dueDate.month = 12;
+      }
+    },
+    "prepareItem.dueDate.day": function() {
+      if (this.prepareItem.dueDate.day > 31) {
+        this.prepareItem.dueDate.day = 31;
+      }
+    },
+  },
 };
 </script>
 <style scoped>

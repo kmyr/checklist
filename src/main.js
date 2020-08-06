@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import $ from "jquery";
 
 const moment = require("moment-jalaali");
 moment().format("jYYYY/jM/jD");
@@ -20,6 +21,7 @@ export const shamsiDay = moment(date, "YYYY/MM/DD").format("jDD");
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+new Vue.use($);
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
