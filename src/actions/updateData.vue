@@ -1,19 +1,24 @@
 <script>
-import db from "../datastore/firebaseInit";
+import db from "../database/firebaseInit";
 export default {
   methods: {
-    updateData(document, obj) {
+    updateData(document, obj, name, reloadPage) {
+      if (name == undefined) {
+        name = obj.title;
+      }
       db.collection(document)
-        .where("name", "==", obj.name)
+        .where("title", "==", name)
         .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
             doc.ref.update(obj).then(() => {
-              location.reload();
+              if (reloadPage) {
+                location.reload();
+              }
             });
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>

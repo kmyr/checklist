@@ -8,7 +8,7 @@
             <div class="card-body">
               <h5 class="card-title">پروشات فیلتر</h5>
               <button class="btn btn-primary task-link">
-                <router-link to="/poroshatfilter">Go somewhere</router-link>
+                <router-link to="/poroshatfilter">مدیریت کارها</router-link>
               </button>
             </div>
           </div>
@@ -16,11 +16,10 @@
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Special title treatment</h5>
-              <p
-                class="card-text"
-              >With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+              <h5 class="card-title">کار های شخصی</h5>
+              <button class="btn btn-primary task-link">
+                <router-link to="/personal">مدیریت کارها</router-link>
+              </button>
             </div>
           </div>
         </div>
@@ -32,7 +31,7 @@
 export default {
   data() {
     return {};
-  }
+  },
 };
 </script>
 <style scoped>
