@@ -1,0 +1,7 @@
+.task-link a {
+    color: #fff;
+}
+.task-link a:hover {
+    color: #fff;
+    text-decoration: none;
+}
